@@ -1,0 +1,6 @@
+{
+  "name": "VYRO",
+  "description": "Next-Generation Creator & Entertainment Platform — Where Content Becomes an Economy.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

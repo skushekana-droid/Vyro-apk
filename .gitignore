@@ -1,0 +1,50 @@
+# Built application files
+*.apk
+*.aar
+*.aab
+
+# Gradle files
+.gradle/
+build/
+app/build/
+.build-outputs/
+
+# Local configuration file (sdk path, etc)
+local.properties
+/local.properties
+
+# Log files
+*.log
+
+# Android Studio / IntelliJ IDEA
+.idea/
+*.iml
+.idea/caches/
+.idea/libraries/
+.idea/modules.xml
+.idea/workspace.xml
+.idea/navEditor.xml
+.idea/assetWizardSettings.xml
+
+# Keystore files
+*.jks
+*.keystore
+!debug.keystore.base64
+
+# Environment variables and Secrets
+.env
+*.env.local
+
+# OS-specific files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Native build caches
+.externalNativeBuild
+.cxx
+captures/
