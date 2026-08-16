@@ -13,9 +13,11 @@ import com.example.infrastructure.video.VyroVideoEngine
 import com.example.model.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import java.util.UUID
 
@@ -57,24 +59,37 @@ class VyroRepository(
 
     init {
         scope.launch {
-            loadOrSeedVideos()
+            loadOrSeedDatabase()
         }
     }
 
-    private suspend fun loadOrSeedVideos() {
+    private suspend fun loadOrSeedDatabase() {
+        val initialUsers = createInitialSeedUsers()
+        userDao.insertUsers(initialUsers.map { it.toEntity() })
+
         val initialList = createInitialSeedVideos()
         val entities = initialList.map { it.toEntity() }
         videoDao.insertVideos(entities)
 
-        videoDao.getAllVideos().collect { entityList ->
-            if (entityList.isNotEmpty()) {
-                val domainList = entityList.map { entity ->
-                    val originalMatch = initialList.find { it.id == entity.id }
-                    entity.toDomain(originalMatch?.linkedProduct)
+        scope.launch {
+            userDao.getUserById("creator_me").collect { userEntity ->
+                if (userEntity != null) {
+                    _currentUser.value = userEntity.toDomain()
                 }
-                _videos.value = domainList
-            } else {
-                _videos.value = initialList
+            }
+        }
+
+        scope.launch {
+            videoDao.getAllVideos().collect { entityList ->
+                if (entityList.isNotEmpty()) {
+                    val domainList = entityList.map { entity ->
+                        val originalMatch = initialList.find { it.id == entity.id }
+                        entity.toDomain(originalMatch?.linkedProduct)
+                    }
+                    _videos.value = domainList
+                } else {
+                    _videos.value = initialList
+                }
             }
         }
     }
@@ -414,18 +429,111 @@ class VyroRepository(
             id = "creator_me",
             username = "@kael_orion",
             displayName = "Kael Orion",
-            bio = "Building cinematic cybernetics and next-gen storytelling on VYRO.",
+            bio = "Building cinematic cybernetics, AI pipelines, and next-gen storytelling on VYRO. 🚀",
             country = "United States",
+            websiteUrl = "https://kaelorion.studio",
             followersCount = 48200,
             followingCount = 142,
             totalViews = 890400,
+            totalLikes = 124500,
             isCreator = true,
             isVerified = true,
             role = UserRole.CREATOR,
             membershipTier = MembershipTier.CREATOR_VIP,
             walletBalance = 3420.50,
             pendingEarnings = 780.00,
-            followedCreatorIds = setOf("creator_2", "creator_3")
+            followedCreatorIds = setOf("creator_1", "creator_2", "creator_3"),
+            categoryTags = listOf("Cyberpunk", "AI Cinema", "VFX", "Virtual Production")
+        )
+    }
+
+    private fun createInitialSeedUsers(): List<User> {
+        return listOf(
+            createInitialUser(),
+            User(
+                id = "creator_1",
+                username = "@elenavance",
+                displayName = "Elena Vance",
+                bio = "Documentary filmmaker & tech creator exploring algorithms, human creativity, and synthetic media.",
+                country = "United Kingdom",
+                websiteUrl = "https://elenavance.media",
+                followersCount = 156000,
+                followingCount = 84,
+                totalViews = 3400000,
+                totalLikes = 412000,
+                isCreator = true,
+                isVerified = true,
+                role = UserRole.CREATOR,
+                membershipTier = MembershipTier.CREATOR_VIP,
+                categoryTags = listOf("Documentary", "Creator Economy", "Tech", "Cinematography")
+            ),
+            User(
+                id = "creator_2",
+                username = "@synthetix_lab",
+                displayName = "Synthetix Labs",
+                bio = "Generative audio research lab & spatial synth plugin creators. Sound design from the year 2040.",
+                country = "Germany",
+                websiteUrl = "https://synthetixlabs.audio",
+                followersCount = 112000,
+                followingCount = 45,
+                totalViews = 2400000,
+                totalLikes = 280000,
+                isCreator = true,
+                isVerified = true,
+                role = UserRole.BUSINESS,
+                membershipTier = MembershipTier.CREATOR_VIP,
+                categoryTags = listOf("Audio Dev", "Synthesizers", "DSP", "Sound Design")
+            ),
+            User(
+                id = "creator_3",
+                username = "@nexus_ai",
+                displayName = "Nexus AI Research",
+                bio = "Benchmarking open multimodal models, autonomous agents, and distributed GPU rendering pipelines.",
+                country = "Canada",
+                websiteUrl = "https://nexus-ai.research",
+                followersCount = 88400,
+                followingCount = 62,
+                totalViews = 1650000,
+                totalLikes = 195000,
+                isCreator = true,
+                isVerified = true,
+                role = UserRole.CREATOR,
+                membershipTier = MembershipTier.CREATOR_VIP,
+                categoryTags = listOf("AI Research", "Agents", "Architecture", "Engineering")
+            ),
+            User(
+                id = "creator_4",
+                username = "@apex_sim",
+                displayName = "Apex Simulation",
+                bio = "Interactive real-time volumetric physics engines, Unreal Engine 5 rendering, and VR simulations.",
+                country = "Japan",
+                websiteUrl = "https://apex-sim.io",
+                followersCount = 64200,
+                followingCount = 38,
+                totalViews = 980000,
+                totalLikes = 110000,
+                isCreator = true,
+                isVerified = true,
+                role = UserRole.CREATOR,
+                membershipTier = MembershipTier.CREATOR_VIP,
+                categoryTags = listOf("GameDev", "Unreal Engine 5", "VR", "Volumetric")
+            ),
+            User(
+                id = "viewer_1",
+                username = "@alex_view",
+                displayName = "Alex Reed",
+                bio = "Tech enthusiast, sci-fi buff, and digital economy observer.",
+                country = "United States",
+                websiteUrl = "https://alexreed.me",
+                followersCount = 142,
+                followingCount = 89,
+                totalViews = 1200,
+                totalLikes = 340,
+                role = UserRole.VIEWER,
+                isCreator = false,
+                membershipTier = MembershipTier.FREE,
+                categoryTags = listOf("Viewer", "Tech", "Sci-Fi")
+            )
         )
     }
 
@@ -819,6 +927,99 @@ class VyroRepository(
             isSavedBookmark = false,
             isLikedByUser = false,
             isUserUploaded = isUserUploaded
+        )
+    }
+
+    // User Profile Room Caching & Flow APIs
+    fun getUserByIdFlow(userId: String): Flow<User?> {
+        return userDao.getUserById(userId).map { entity ->
+            entity?.toDomain()
+        }
+    }
+
+    fun getAllCachedUsersFlow(): Flow<List<User>> {
+        return userDao.getAllCachedUsers().map { list ->
+            list.map { it.toDomain() }
+        }
+    }
+
+    fun getVideosByCreatorFlow(creatorId: String): Flow<List<Video>> {
+        return videoDao.getVideosByCreator(creatorId).map { entities ->
+            entities.map { it.toDomain() }
+        }
+    }
+
+    suspend fun updateProfileInRoom(
+        userId: String,
+        displayName: String,
+        bio: String,
+        country: String,
+        websiteUrl: String,
+        tags: List<String>
+    ) {
+        val tagsString = tags.joinToString(",")
+        userDao.updateProfile(userId, displayName, bio, country, websiteUrl, tagsString)
+        if (_currentUser.value.id == userId) {
+            _currentUser.value = _currentUser.value.copy(
+                displayName = displayName,
+                bio = bio,
+                country = country,
+                websiteUrl = websiteUrl,
+                categoryTags = tags
+            )
+        }
+    }
+
+    private fun User.toEntity(): UserEntity {
+        return UserEntity(
+            id = id,
+            username = username,
+            displayName = displayName,
+            avatarUrl = avatarUrl,
+            bannerUrl = bannerUrl,
+            bio = bio,
+            country = country,
+            websiteUrl = websiteUrl,
+            dateJoined = dateJoined,
+            followersCount = followersCount,
+            followingCount = followingCount,
+            totalViews = totalViews,
+            totalLikes = totalLikes,
+            isCreator = isCreator,
+            isVerified = isVerified,
+            role = role.name,
+            membershipTier = membershipTier.name,
+            walletBalance = walletBalance,
+            pendingEarnings = pendingEarnings,
+            categoryTagsString = categoryTags.joinToString(",")
+        )
+    }
+
+    private fun UserEntity.toDomain(): User {
+        val parsedRole = try { UserRole.valueOf(role) } catch (e: Exception) { UserRole.VIEWER }
+        val parsedTier = try { MembershipTier.valueOf(membershipTier) } catch (e: Exception) { MembershipTier.FREE }
+        val parsedTags = if (categoryTagsString.isNotBlank()) categoryTagsString.split(",") else listOf("Cinema", "AI", "VFX", "Tech")
+        return User(
+            id = id,
+            username = username,
+            displayName = displayName,
+            avatarUrl = avatarUrl,
+            bannerUrl = bannerUrl,
+            bio = bio,
+            country = country,
+            websiteUrl = if (websiteUrl.isNotBlank()) websiteUrl else "https://vyro.media/$username",
+            dateJoined = dateJoined,
+            followersCount = followersCount,
+            followingCount = followingCount,
+            totalViews = totalViews,
+            totalLikes = totalLikes,
+            isCreator = isCreator,
+            isVerified = isVerified,
+            role = parsedRole,
+            membershipTier = parsedTier,
+            walletBalance = walletBalance,
+            pendingEarnings = pendingEarnings,
+            categoryTags = parsedTags
         )
     }
 

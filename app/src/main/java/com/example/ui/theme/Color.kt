@@ -18,6 +18,8 @@ val VyroGoldLight = Color(0xFFFBBF24)
 
 val VyroEmerald = Color(0xFF10B981)
 val VyroRose = Color(0xFFF43F5E)
+val VyroGreenSuccess = Color(0xFF10B981)
+val VyroPinkAccent = Color(0xFFF43F5E)
 
 // Clean Minimalism Obsidian Dark Canvas (#050505 / #0A0A0A / #121215)
 val VyroBackground = Color(0xFF050505)

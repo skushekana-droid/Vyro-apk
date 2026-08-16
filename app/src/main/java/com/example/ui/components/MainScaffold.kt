@@ -304,6 +304,15 @@ fun VyroNavigationRail(
                     testTag = "nav_rail_shorts"
                 )
 
+                val isStassenSelected = currentScreen == Screen.STASSEN
+                RailNavItem(
+                    icon = if (isStassenSelected) Icons.Filled.SmartToy else Icons.Outlined.SmartToy,
+                    label = "Stassen",
+                    isSelected = isStassenSelected,
+                    onClick = { onNavigate(Screen.STASSEN) },
+                    testTag = "nav_rail_stassen"
+                )
+
                 val isLiveSelected = currentScreen == Screen.LIVE
                 RailNavItem(
                     icon = if (isLiveSelected) Icons.Filled.Sensors else Icons.Outlined.Sensors,

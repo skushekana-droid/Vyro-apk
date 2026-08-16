@@ -216,6 +216,17 @@ fun VyroTopBar(
                         HorizontalDivider(color = VyroBorder)
 
                         DropdownMenuItem(
+                            text = { Text("Stassen AI Assistant", color = VyroVioletLight, fontWeight = FontWeight.Bold) },
+                            onClick = {
+                                showUserMenu = false
+                                onNavigate(Screen.STASSEN)
+                            },
+                            leadingIcon = {
+                                Icon(Icons.Default.SmartToy, contentDescription = null, tint = VyroVioletPrimary)
+                            }
+                        )
+
+                        DropdownMenuItem(
                             text = { Text("Live Broadcasts", color = VyroRose, fontWeight = FontWeight.SemiBold) },
                             onClick = {
                                 showUserMenu = false

@@ -110,6 +110,9 @@ fun VyroApp(viewModel: VyroViewModel) {
                         onTipClick = { viewModel.openTipDialog(it) },
                         onShareClick = {
                             viewModel.showSnackbar("Video link copied to clipboard!")
+                        },
+                        onOpenStassen = {
+                            viewModel.navigateTo(Screen.STASSEN)
                         }
                     )
                 }
@@ -227,6 +230,12 @@ fun VyroApp(viewModel: VyroViewModel) {
                         onVideoClick = { viewModel.openVideo(it) },
                         onTipClick = {
                             creatorVideos.firstOrNull()?.let { viewModel.openTipDialog(it) }
+                        },
+                        onLikeVideo = { viewModel.toggleLike(it) },
+                        onBookmarkVideo = { viewModel.toggleBookmark(it) },
+                        onShareProfile = { viewModel.showSnackbar("Profile link copied to clipboard!") },
+                        onUpdateProfile = { name, bio, country, website, tags ->
+                            viewModel.updateUserProfile(profileUser.id, name, bio, country, website, tags)
                         }
                     )
                 }
@@ -281,6 +290,13 @@ fun VyroApp(viewModel: VyroViewModel) {
                             viewModel.sendTip(amount.toDoubleOrNull() ?: 10.0, "Live tip to $streamer")
                         },
                         onShowSnackbar = { viewModel.showSnackbar(it) }
+                    )
+                }
+
+                Screen.STASSEN -> {
+                    StassenScreen(
+                        currentUser = currentUser,
+                        onBack = { viewModel.popBackStack() }
                     )
                 }
 

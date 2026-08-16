@@ -40,7 +40,8 @@ fun HomeScreen(
     onLikeClick: (String) -> Unit,
     onBookmarkClick: (String) -> Unit,
     onTipClick: (Video) -> Unit,
-    onShareClick: (Video) -> Unit
+    onShareClick: (Video) -> Unit,
+    onOpenStassen: () -> Unit = {}
 ) {
     Column(
         modifier = Modifier
@@ -171,6 +172,76 @@ fun HomeScreen(
                 horizontalArrangement = Arrangement.spacedBy(16.dp),
                 verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
+                // Interactive Stassen AI Assistant Banner
+                item(span = { GridItemSpan(maxLineSpan) }) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clip(RoundedCornerShape(16.dp))
+                            .background(VyroSurfaceElevated)
+                            .border(1.dp, VyroVioletPrimary.copy(alpha = 0.5f), RoundedCornerShape(16.dp))
+                            .clickable { onOpenStassen() }
+                            .padding(14.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.weight(1f)) {
+                            Box {
+                                androidx.compose.foundation.Image(
+                                    painter = androidx.compose.ui.res.painterResource(id = com.example.model.StassenIdentityRegistry.PRIMARY_PORTRAIT_RES),
+                                    contentDescription = "Stassen Character Identity",
+                                    modifier = Modifier
+                                        .size(46.dp)
+                                        .clip(androidx.compose.foundation.shape.CircleShape)
+                                        .border(1.5.dp, VyroVioletPrimary, androidx.compose.foundation.shape.CircleShape),
+                                    contentScale = androidx.compose.ui.layout.ContentScale.Crop
+                                )
+                                Box(
+                                    modifier = Modifier
+                                        .align(Alignment.BottomEnd)
+                                        .size(10.dp)
+                                        .clip(androidx.compose.foundation.shape.CircleShape)
+                                        .background(VyroEmerald)
+                                        .border(1.5.dp, VyroSurface, androidx.compose.foundation.shape.CircleShape)
+                                )
+                            }
+                            Spacer(modifier = Modifier.width(12.dp))
+                            Column {
+                                Row(verticalAlignment = Alignment.CenterVertically) {
+                                    Text(
+                                        text = "Stassen AI Companion",
+                                        color = Color.White,
+                                        fontWeight = FontWeight.Bold,
+                                        fontSize = 14.sp
+                                    )
+                                    Spacer(modifier = Modifier.width(6.dp))
+                                    Text(
+                                        text = "• In Virtual Residence",
+                                        color = VyroCyanLight,
+                                        fontSize = 10.sp,
+                                        fontWeight = FontWeight.Medium
+                                    )
+                                }
+                                Text(
+                                    text = "Tap to visit Stassen's office, discuss videos, or research topics",
+                                    color = VyroTextMuted,
+                                    fontSize = 11.sp,
+                                    maxLines = 1
+                                )
+                            }
+                        }
+
+                        Button(
+                            onClick = onOpenStassen,
+                            colors = ButtonDefaults.buttonColors(containerColor = VyroVioletPrimary),
+                            shape = RoundedCornerShape(10.dp),
+                            contentPadding = PaddingValues(horizontal = 12.dp, vertical = 6.dp)
+                        ) {
+                            Text("Visit House", fontWeight = FontWeight.Bold, fontSize = 11.sp)
+                        }
+                    }
+                }
+
                 items(videos, key = { it.id }) { video ->
                     VideoFeedCard(
                         video = video,

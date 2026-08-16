@@ -6,13 +6,14 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 
 @Database(
-    entities = [VideoEntity::class, UserEntity::class],
-    version = 1,
+    entities = [VideoEntity::class, UserEntity::class, StassenMemoryEntity::class],
+    version = 3,
     exportSchema = false
 )
 abstract class VyroDatabase : RoomDatabase() {
     abstract fun videoDao(): VideoDao
     abstract fun userDao(): UserDao
+    abstract fun stassenMemoryDao(): StassenMemoryDao
 
     companion object {
         @Volatile

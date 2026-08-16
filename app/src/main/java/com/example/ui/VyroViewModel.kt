@@ -26,6 +26,7 @@ enum class Screen {
     SHORTS,
     WATCH,
     LIVE,
+    STASSEN,
     CREATOR_STUDIO,
     CREATOR_PROFILE,
     COMMUNITIES,
@@ -204,6 +205,28 @@ class VyroViewModel(
 
     fun toggleFollow(creatorId: String) {
         repository.toggleFollow(creatorId)
+    }
+
+    fun updateUserProfile(
+        userId: String,
+        displayName: String,
+        bio: String,
+        country: String,
+        websiteUrl: String,
+        tags: List<String>
+    ) {
+        viewModelScope.launch {
+            repository.updateProfileInRoom(userId, displayName, bio, country, websiteUrl, tags)
+            showSnackbar("Profile updated & cached locally in Room database!")
+        }
+    }
+
+    fun getCreatorFlow(creatorId: String): Flow<User?> {
+        return repository.getUserByIdFlow(creatorId)
+    }
+
+    fun getCreatorVideosFlow(creatorId: String): Flow<List<Video>> {
+        return repository.getVideosByCreatorFlow(creatorId)
     }
 
     fun addComment(videoId: String, text: String) {
