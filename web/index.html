@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>VYRO - Video & Social Platform</title>
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#0B0E14">
+  <link rel="stylesheet" href="css/style.css">
+  <!-- Feather Icons CDN -->
+  <script src="https://unpkg.com/feather-icons"></script>
+</head>
+<body>
+  <div id="app-container">
+    <!-- Top Header -->
+    <header class="vyro-header">
+      <div class="logo">VYRO</div>
+      <div class="feed-tabs">
+        <span class="tab-btn" onclick="renderFeed()">Following</span>
+        <span class="tab-btn active" onclick="renderFeed()">For You</span>
+      </div>
+      <div style="width: 24px;"></div>
+    </header>
+
+    <!-- 1. Home / Video Feed Screen -->
+    <main id="screen-home" class="screen active">
+      <div class="video-feed" id="video-feed-container">
+        <!-- Rendered via js/app.js -->
+      </div>
+    </main>
+
+    <!-- 2. Discover / Search Screen -->
+    <main id="screen-discover" class="screen" style="flex-direction: column; padding: 64px 16px 64px; overflow-y: auto;">
+      <h2 style="font-size: 20px; font-weight: 800; margin-bottom: 12px;">Discover</h2>
+      <input type="text" placeholder="Search creators, videos, hashtags..." style="width: 100%; padding: 12px 16px; border-radius: 12px; background: #1E293B; border: 1px solid rgba(255,255,255,0.1); color: #fff; outline: none; margin-bottom: 16px;">
+      <h3 style="font-size: 13px; color: #94A3B8; margin-bottom: 8px; letter-spacing: 0.5px;">TRENDING HASHTAGS</h3>
+      <div style="display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 24px;">
+        <span style="background: #1E293B; padding: 6px 14px; border-radius: 16px; font-size: 13px; font-weight: 500;">#TechVibe</span>
+        <span style="background: #1E293B; padding: 6px 14px; border-radius: 16px; font-size: 13px; font-weight: 500;">#CinematicShorts</span>
+        <span style="background: #1E293B; padding: 6px 14px; border-radius: 16px; font-size: 13px; font-weight: 500;">#VyroCreators</span>
+        <span style="background: #1E293B; padding: 6px 14px; border-radius: 16px; font-size: 13px; font-weight: 500;">#AIArt</span>
+      </div>
+
+      <h3 style="font-size: 13px; color: #94A3B8; margin-bottom: 8px; letter-spacing: 0.5px;">FEATURED CREATORS</h3>
+      <div style="display: flex; flex-direction: column; gap: 10px;">
+        <div style="display: flex; align-items: center; justify-content: space-between; background: #151921; padding: 10px 14px; border-radius: 12px;">
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&auto=format&fit=crop&q=80" style="width: 36px; height: 36px; border-radius: 50%; object-fit: cover;">
+            <div>
+              <div style="font-weight: 700; font-size: 13.5px;">Elena Rostova</div>
+              <div style="font-size: 11.5px; color: #94A3B8;">@elena_cinematic</div>
+            </div>
+          </div>
+          <button style="background: #6366F1; color: #fff; border: none; padding: 4px 12px; border-radius: 14px; font-size: 12px; font-weight: 600; cursor: pointer;">Follow</button>
+        </div>
+      </div>
+    </main>
+
+    <!-- 3. Notifications Screen -->
+    <main id="screen-notifications" class="screen" style="flex-direction: column; padding: 64px 16px 64px; overflow-y: auto;">
+      <h2 style="font-size: 20px; font-weight: 800; margin-bottom: 16px;">Inbox & Alerts</h2>
+      <div style="display: flex; flex-direction: column; gap: 8px;">
+        <div style="display: flex; gap: 12px; padding: 12px; background: #151921; border-radius: 12px;">
+          <div style="width: 38px; height: 38px; border-radius: 50%; background: rgba(236,72,153,0.2); color: #EC4899; display: flex; align-items: center; justify-content: center; font-size: 18px;">❤️</div>
+          <div>
+            <p style="font-size: 13.5px; margin-bottom: 2px;"><strong>Alex Vance</strong> liked your video</p>
+            <span style="font-size: 11px; color: #94A3B8;">15m ago</span>
+          </div>
+        </div>
+        <div style="display: flex; gap: 12px; padding: 12px; background: #151921; border-radius: 12px;">
+          <div style="width: 38px; height: 38px; border-radius: 50%; background: rgba(99,102,241,0.2); color: #6366F1; display: flex; align-items: center; justify-content: center; font-size: 18px;">💬</div>
+          <div>
+            <p style="font-size: 13.5px; margin-bottom: 2px;"><strong>Sarah Chen</strong> commented: "Incredible shot!"</p>
+            <span style="font-size: 11px; color: #94A3B8;">1h ago</span>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- 4. Profile Screen -->
+    <main id="screen-profile" class="screen" style="flex-direction: column; padding: 64px 16px 64px; overflow-y: auto;">
+      <div style="display: flex; flex-direction: column; align-items: center; margin-bottom: 16px;">
+        <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200&auto=format&fit=crop&q=80" style="width: 84px; height: 84px; border-radius: 50%; object-fit: cover; border: 2px solid #6366F1; margin-bottom: 10px;">
+        <h3 style="font-size: 17px; font-weight: 700;">@skushekana</h3>
+        <p style="font-size: 13px; color: #94A3B8; margin-top: 2px;">VYRO Content Creator & Visual Storyteller 🎥</p>
+      </div>
+
+      <div style="display: flex; justify-content: space-around; width: 100%; padding: 14px 0; border-top: 1px solid var(--border-color); border-bottom: 1px solid var(--border-color); margin-bottom: 16px;">
+        <div style="text-align: center;"><div style="font-weight: 800; font-size: 16px;">14.2K</div><div style="font-size: 11px; color: #94A3B8;">Followers</div></div>
+        <div style="text-align: center;"><div style="font-weight: 800; font-size: 16px;">390</div><div style="font-size: 11px; color: #94A3B8;">Following</div></div>
+        <div style="text-align: center;"><div style="font-weight: 800; font-size: 16px;">120.5K</div><div style="font-size: 11px; color: #94A3B8;">Likes</div></div>
+      </div>
+
+      <div style="display: flex; gap: 8px; margin-bottom: 16px;">
+        <button style="flex: 1; padding: 10px; background: #1E293B; border: 1px solid var(--border-color); border-radius: 8px; color: #fff; font-size: 13px; font-weight: 600; cursor: pointer;">Edit Profile</button>
+        <button style="flex: 1; padding: 10px; background: #1E293B; border: 1px solid var(--border-color); border-radius: 8px; color: #fff; font-size: 13px; font-weight: 600; cursor: pointer;">Share Profile</button>
+      </div>
+    </main>
+
+    <!-- Comments Sheet Modal -->
+    <div id="comments-modal" class="modal-overlay" onclick="if(event.target===this)closeComments()">
+      <div class="modal-sheet">
+        <div class="modal-header">
+          <span>Comments</span>
+          <span style="cursor: pointer;" onclick="closeComments()">✕</span>
+        </div>
+        <div class="comments-list" id="modal-comments-list"></div>
+        <div class="comment-input-row">
+          <input type="text" id="comment-input-field" class="comment-input" placeholder="Add a comment..." onkeydown="if(event.key==='Enter')postComment()">
+          <button style="background: #6366F1; color: #fff; border: none; border-radius: 50%; width: 36px; height: 36px; cursor: pointer; display: flex; align-items: center; justify-content: center;" onclick="postComment()">➤</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottom Navigation Bar -->
+    <nav class="bottom-nav">
+      <button class="nav-item active" onclick="navigateTo('home', event)">
+        <i data-feather="home"></i>
+        <span>Home</span>
+      </button>
+      <button class="nav-item" onclick="navigateTo('discover', event)">
+        <i data-feather="compass"></i>
+        <span>Discover</span>
+      </button>
+      <button class="nav-item" onclick="handleUpload()">
+        <div class="nav-create-btn">+</div>
+      </button>
+      <button class="nav-item" onclick="navigateTo('notifications', event)">
+        <i data-feather="bell"></i>
+        <span>Inbox</span>
+      </button>
+      <button class="nav-item" onclick="navigateTo('profile', event)">
+        <i data-feather="user"></i>
+        <span>Profile</span>
+      </button>
+    </nav>
+  </div>
+
+  <script src="js/app.js"></script>
+  <script>feather.replace();</script>
+</body>
+</html>
